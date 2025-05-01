@@ -16,7 +16,7 @@ jobs:
         name: Unit Testing
         strategy:
           matrix:
-            os-env: [ubuntu-latest,windows]
+            os-env: [ubuntu-latest,windows-latest]
             versions: [20,22]
         runs-on: ${{matrix.os-env}}
         steps:
