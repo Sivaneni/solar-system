@@ -6,10 +6,47 @@ on:
     branches:
       - main
       - 'feature/*'
-    
+env:
+  MONGO_USERNAME: ${{ vars.MONGO_USERNAME }}
+  MONGO_PASSWORD: ${{secrets.MONGO_PASSWORD}}
+  MONGO_CLUSTER_URL: ${{vars.MONGO_CLUSTER_URL}}
+  MONGO_DB_NAME: ${{vars.MONGO_DB_NAME}}
 jobs:
     unit-testing:
         name: Unit Testing
+        strategy:
+          matrix:
+            os-env: [ubuntu-latest,windows-latest]
+            versions: [20,22]
+        runs-on: ${{matrix.os-env}}
+        steps:
+        - name: Checkout Repository
+          uses: actions/checkout@v4
+
+        - name: Setup NodeJS Version ${{matrix.versions}}
+          uses: actions/setup-node@v3
+          with:
+            node-version: ${{matrix.versions}}
+        -  name: Node dependcies cache
+           uses: actions/cache@v4
+           with:
+               path: node_modules
+               key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        - name: Install Dependencies
+          run: npm install
+    
+        - name: Unit Testing
+          run: npm test
+          continue-on-error: true
+        - name: Archive Test Result
+          uses: actions/upload-artifact@v4
+          with:
+            name: Mocha-Test-Result
+            path: test-results.xml
+            overwrite: true
+    
+    coverage:
+        name: code-voverage
         runs-on: ubuntu-latest
         steps:
         - name: Checkout Repository
@@ -19,15 +56,23 @@ jobs:
           uses: actions/setup-node@v3
           with:
             node-version: 20
-    
+        -  name: Node dependcies cache
+           uses: actions/cache@v4
+           with:
+              path: node_modules
+              key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        
         - name: Install Dependencies
           run: npm install
     
-        - name: Unit Testing
-          run: npm test
+        - name: Install Dependencies
+          run: npm run coverage
           
-        - name: Archive Test Result
-          uses: actions/upload-artifact@v3
+        - name: Upload Artifact
+          uses: actions/upload-artifact@v4
+          if:   always()
           with:
-            name: Mocha-Test-Result
-            path: test-results.xml
+            name: npm-coverage-reports
+            path: coverage
+            retention-days: 5
+            overwrite: true
