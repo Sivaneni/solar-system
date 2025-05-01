@@ -66,3 +66,4 @@ jobs:
             name: npm-coverage-reports
             path: coverage
             retention-days: 5
+            overwrite: true
