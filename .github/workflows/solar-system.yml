@@ -7,10 +7,10 @@ on:
       - main
       - 'feature/*'
 env:
-  MONGO_USERNAME: {{vars.MONGO_USERNAME}}
-  MONGO_PASSWORD: {{secrets.MONGO_PASSWORD}}
-  MONGO_CLUSTER_URL: {{vars.MONGO_CLUSTER_URL}}
-  MONGO_DB_NAME: {{vars.MONGO_DB_NAME}}
+  MONGO_USERNAME: ${{ vars.MONGO_USERNAME }}
+  MONGO_PASSWORD: ${{secrets.MONGO_PASSWORD}}
+  MONGO_CLUSTER_URL: ${{vars.MONGO_CLUSTER_URL}}
+  MONGO_DB_NAME: ${{vars.MONGO_DB_NAME}}
 jobs:
     unit-testing:
         name: Unit Testing
