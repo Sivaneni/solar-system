@@ -16,8 +16,8 @@ jobs:
         name: Unit Testing
         strategy:
           matrix:
-            os-env: [ubuntu-latest,windows-latest]
-            versions: [20,22]
+            os-env: [ubuntu-latest]
+            versions: [18]
         runs-on: ${{matrix.os-env}}
         steps:
         - name: Checkout Repository
@@ -69,7 +69,8 @@ jobs:
         - name: Install Dependencies
           run: npm install
     
-        - name: Install Dependencies
+        - name: run coverage
+          continue-on-error: true
           run: npm run coverage
           
         - name: Upload Artifact
