@@ -16,7 +16,7 @@ const clusterUrl = process.env.MONGO_CLUSTER_URL; // Default cluster URL
 const dbName = process.env.MONGO_DB_NAME; // Default database name
 
 // Construct the MongoDB URI dynamically
-const uri = `mongodb+srv://${username}:${password}@${clusterUrl}/?retryWrites=true&w=majority&appName=Cluster0`;
+const uri = `mongodb://${username}:${password}@${clusterUrl}/?retryWrites=true&w=majority&appName=Cluster0`;
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
