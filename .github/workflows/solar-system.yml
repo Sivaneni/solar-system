@@ -106,5 +106,6 @@ jobs:
            -e MONGO_URI=${{vars.MONGO_CLUSTER_URL}}  -e  MONGO_USERNAME=${{ vars.MONGO_USERNAME }} \
            -e MONGO_PASSWORD=${{secrets.MONGO_PASSWORD}} \
             ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
+           sleep 60
            wget -qO- http://127.0.0.1:3000 | grep live
         
