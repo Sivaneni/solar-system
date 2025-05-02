@@ -101,7 +101,7 @@ jobs:
         - name: docker test image
           run: |
            docker images
-           docker run -p  3000:3000 \
+           docker run -it -p  3000:3000 \
            -e MONGO_URI=${{vars.MONGO_CLUSTER_URL}}  -e  MONGO_USERNAME=${{ vars.MONGO_USERNAME }} \
            -e MONGO_PASSWORD=${{secrets.MONGO_PASSWORD}} \
             ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
