@@ -107,7 +107,7 @@ jobs:
            -e MONGO_PASSWORD=${{secrets.MONGO_PASSWORD}} \
             ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
            sleep 30
-           docker exec test5 solar-system-app env
+           docker exec  solar-system-app env
            docker logs solar-system-app
            wget -q -O - http://127.0.0.1:3000 | grep live
         
