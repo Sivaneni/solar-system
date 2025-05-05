@@ -83,7 +83,7 @@ jobs:
             overwrite: true
     docker:
       name: containerization
-      runs-on: self-hosted
+      runs-on: windows-latest
       needs: [coverage,unit-testing]
       steps:
         - name: checkout
