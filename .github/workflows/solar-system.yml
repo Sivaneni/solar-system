@@ -83,7 +83,7 @@ jobs:
             overwrite: true
     docker:
       name: containerization
-      runs-on: ubuntu-latest
+      runs-on: self-hosted
       needs: [coverage,unit-testing]
       steps:
         - name: checkout
