@@ -93,16 +93,13 @@ jobs:
            with:
                username: ${{ vars.DOCKERHUB_USERNAME }}
                password: ${{ secrets.DOCKERHUB_TOKEN }}
-               
-                # Add support for more platforms with QEMU (optional)
-                # https://github.com/docker/setup-qemu-action
         
        
         - name: Build image
           uses: docker/build-push-action@v6
           with:
             context: .
-            push: true
+            push: false
             tags: ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
         - name: docker test image
           run: |
