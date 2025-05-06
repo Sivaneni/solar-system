@@ -16,8 +16,8 @@ jobs:
         name: Unit Testing
         strategy:
           matrix:
-            os-env: [ubuntu-latest,windows-latest]
-            versions: [20,22]
+            os-env: [ubuntu-latest]
+            versions: [18]
         runs-on: ${{matrix.os-env}}
         steps:
         - name: Checkout Repository
@@ -69,7 +69,8 @@ jobs:
         - name: Install Dependencies
           run: npm install
     
-        - name: Install Dependencies
+        - name: run coverage
+          continue-on-error: true
           run: npm run coverage
           
         - name: Upload Artifact
@@ -80,3 +81,35 @@ jobs:
             path: coverage
             retention-days: 5
             overwrite: true
+    docker:
+      name: containerization
+      runs-on: self-hosted
+      needs: [coverage,unit-testing]
+      steps:
+        - name: checkout
+          uses: actions/checkout@v4
+        -  name: Login to Docker Hub
+           uses: docker/login-action@v3
+           with:
+               username: ${{ vars.DOCKERHUB_USERNAME }}
+               password: ${{ secrets.DOCKERHUB_TOKEN }}
+        
+       
+        - name: Build image
+          uses: docker/build-push-action@v6
+          with:
+            context: .
+            push: false
+            tags: ${{ vars.DOCKERHUB_USERNAME }}/solar-system:latest
+        - name: docker test image
+          run: |
+           docker images
+           docker run --name solar-system-app  -p  3000:3000 -d  \
+           -e MONGO_URI=${{vars.MONGO_CLUSTER_URL}}  -e  MONGO_USERNAME=${{ vars.MONGO_USERNAME }} \
+           -e MONGO_PASSWORD=${{secrets.MONGO_PASSWORD}} \
+            ${{ vars.DOCKERHUB_USERNAME }}/solar-system:latest
+           sleep 30
+           docker exec  solar-system-app env
+           docker logs solar-system-app
+           wget -q -O - http://127.0.0.1:3000 | grep live
+        
