@@ -10,13 +10,17 @@ const app = express();
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '/')));
 app.use(cors());
-const username = process.env.MONGO_USERNAME; // Default username
-const password = process.env.MONGO_PASSWORD; // Default password
-const clusterUrl = process.env.MONGO_CLUSTER_URL; // Default cluster URL
-const dbName = process.env.MONGO_DB_NAME; // Default database name
+const username = process.env.MONGO_USERNAME || "superuser"; // Default username
+const password = process.env.MONGO_PASSWORD || "superPassword"; // Default password
+const clusterUrl = process.env.MONGO_CLUSTER_URL || "cluster0.zn8kg6t.mongodb.net"; // Default cluster URL
+const dbName = process.env.MONGO_DB_NAME || "superData"; // Default database name
+//const dbName = process.env.MONGO_DB_NAME; // Default database name
 
 // Construct the MongoDB URI dynamically
-const uri = `mongodb+srv://${username}:${password}@${clusterUrl}/?retryWrites=true&w=majority&appName=Cluster0`;
+//const uri = `mongodb+srv://${username}:${password}@${clusterUrl}/?retryWrites=true&w=majority&appName=Cluster0`;
+const uri = `mongodb+srv://${username}:${password}@${clusterUrl}/`;
+
+
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
